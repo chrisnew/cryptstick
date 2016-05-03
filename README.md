@@ -4,7 +4,7 @@
 
 ## Idea
 
-You want to store sensitive data like your private keys more securely. Often you use a veracrypt container or a luks container. You mount it once, you then use the private key and usually you forget to unmount and close the container. Your private data might be open to attacks. **cryptstick** should protected you from unneeded mounted sensitive data.
+You want to store sensitive data like your private keys more securely. Often you use a veracrypt container or a luks container. You mount it once, you then use the private key and usually you forget to unmount and close the container. Your private data might be open to attacks. **cryptstick** should protect you from unneeded mounted sensitive data.
 
 ## How to use?
 
