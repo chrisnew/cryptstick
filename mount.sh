@@ -33,7 +33,7 @@ if [ -z "$1" ]; then
   exec xterm -title "$CRYPTSTICK_PRODUCT" -e "sudo $0 - || sleep 5s"
 fi
 
-cd "`dirname "$0"`"
+cd "$(dirname "$0")" || exit 1
 
 imageName="$1"
 
@@ -42,11 +42,11 @@ if [ "$1" == "-" ]; then
  find . -maxdepth 1 -mindepth 1 -type f -name '*.img' -exec basename {} .img \;
  echo -n "what to mount? "
  while [ -z "$imageName" ]; do
-  read imageName
+  read -r imageName
  done
 fi
 
-imageFile="`pwd`/$imageName.img"
+imageFile="$(pwd)/$imageName.img"
 mappedName="$CRYPTSTICK_DEVICEMAPPER_PREFIX-$imageName"
 mappedDevice="/dev/mapper/$mappedName"
 
@@ -78,7 +78,7 @@ fi
 
 mountCmdLine="$mountCmdLine $mappedDevice $imageName"
 
-if [ -n "CRYPTSTICK_MOUNT_OPTIONS" ]; then
+if [ -n "$CRYPTSTICK_MOUNT_OPTIONS" ]; then
  mountCmdLine="$mountCmdLine -o $CRYPTSTICK_MOUNT_OPTIONS"
 fi
 
@@ -99,7 +99,7 @@ if [ -e "$mountLogFile" ]; then
  echo -n "last usage was at "
  tail -n 1 "$mountLogFile"
  echo -n "count of usages: "
- cat "$mountLogFile" | wc -l 	
+ wc -l < "$mountLogFile" 	
 fi
 
 touch "$mountLogFile"
@@ -145,7 +145,7 @@ trap shutdown EXIT
 sleep $CRYPTSTICK_SLEEP_MAIN
 
 # wait for user to complete
-while [ -n "`fuser -n file -M -m "$imageName" 2> /dev/null`" ] ; do
+while [ -n "$(fuser -n file -M -m "$imageName" 2> /dev/null)" ] ; do
  clear
 
  echo -en "\a"
@@ -161,4 +161,5 @@ while [ -n "`fuser -n file -M -m "$imageName" 2> /dev/null`" ] ; do
 
  sleep $CRYPTSTICK_SLEEP_LOOP
 done
+
 
