@@ -10,7 +10,7 @@ CRYPTSTICK_SLEEP_MAIN="15m"
 # loop sleep time
 CRYPTSTICK_SLEEP_LOOP="5m"
 
-# mount log filename (we log every single mount)
+# mount log filename (we log every single mount) (optional)
 CRYPTSTICK_LOG_MOUNTS=".mount.log"
 
 # device mapper prefix
@@ -39,8 +39,11 @@ imageName="$1"
 
 if [ "$1" == "-" ]; then
  imageName=""
+ echo
+ echo "Available containers:"
  find . -maxdepth 1 -mindepth 1 -type f -name '*.img' -exec basename {} .img \;
- echo -n "what to mount? "
+ echo
+ echo -n "Which container do you want to mount? "
  while [ -z "$imageName" ]; do
   read -r imageName
  done
@@ -65,7 +68,7 @@ if [ ! -e "$mappedDevice" ]; then
 fi
 
 echo -n "...checking $mappedDevice: "
-(fsck.ext4 -y "$mappedDevice" > /dev/null)
+(fsck -y "$mappedDevice" > /dev/null)
 
 echo -n "...mounting $mappedDevice: "
 mkdir -p "$imageName"
@@ -85,27 +88,29 @@ fi
 $mountCmdLine
 
 if [ "$?" -ne 0 ]; then
- echo "mountCmdLine: "
+ echo "mount failed, it was called that way:"
  echo "$mountCmdLine"
  
 else
  echo "OK."
 fi
 
-mountLogFile="$imageName/$CRYPTSTICK_LOG_MOUNTS"
+if [ -n "$CRYPTSTICK_LOG_MOUNTS" ]; then
+ mountLogFile="$imageName/$CRYPTSTICK_LOG_MOUNTS"
 
-if [ -e "$mountLogFile" ]; then
- echo
- echo -n "last usage was at "
- tail -n 1 "$mountLogFile"
- echo -n "count of usages: "
- wc -l < "$mountLogFile" 	
+ if [ -e "$mountLogFile" ]; then
+  echo
+  echo -n "last usage was at "
+  tail -n 1 "$mountLogFile"
+  echo -n "count of usages: "
+  wc -l < "$mountLogFile" 	
+ fi
+
+ touch "$mountLogFile"
+ chmod 600 "$mountLogFile"
+ date >> "$mountLogFile"
+ chmod 400 "$mountLogFile"
 fi
-
-touch "$mountLogFile"
-chmod 600 "$mountLogFile"
-date >> "$mountLogFile"
-chmod 400 "$mountLogFile"
 
 echo
 echo "we are ready! now you got $CRYPTSTICK_SLEEP_MAIN to do your stuff."
