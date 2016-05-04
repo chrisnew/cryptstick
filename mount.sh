@@ -65,7 +65,7 @@ if [ ! -e "$mappedDevice" ]; then
 fi
 
 echo -n "...checking $mappedDevice: "
-(fsck.ext4 -y "$mappedDevice" > /dev/null)
+(fsck -y "$mappedDevice" > /dev/null)
 
 echo -n "...mounting $mappedDevice: "
 mkdir -p "$imageName"
