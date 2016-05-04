@@ -39,8 +39,11 @@ imageName="$1"
 
 if [ "$1" == "-" ]; then
  imageName=""
+ echo
+ echo "Available containers:"
  find . -maxdepth 1 -mindepth 1 -type f -name '*.img' -exec basename {} .img \;
- echo -n "what to mount? "
+ echo
+ echo -n "Which container do you want to mount? "
  while [ -z "$imageName" ]; do
   read -r imageName
  done
