@@ -18,6 +18,35 @@ If you would like to store sensitive data like your private keys more securely y
 
 `mount.sh` also has a xterm frontend if you open it by clicking it for example.
 
+### Example use
+
+A full output of `mount.sh` in real life is below.
+
+Note the `^C` (`SIGINT` signal). It gracefully stops the script. It’s useful when you are done and no longer need the opened container.
+
+```
+$ sudo ./mount.sh private
+cryptstick 1.0.1 - welcome.
+selected container: private
+...opening luks device: Enter passphrase for /run/media/user/usb/private.img: OK.
+...checking /dev/mapper/cryptstick-private: e2fsck 1.42.13 (17-May-2015)
+...mounting /dev/mapper/cryptstick-private: OK.
+
+last usage was at Di 3. Mai 12:09:40 CEST 2016
+count of usages: 8
+
+we are ready! now you got 15m to do your stuff.
+
+^C
+...killing all remaining processes: OK.
+...unmounting /dev/mapper/cryptstick-private: OK.
+...closing cryptstick-private: OK.
+...removing mount point: OK.
+...syncing device: OK.
+
+goodbye.
+```
+
 ## Configuration
 
 You can store your own configuration in `cs-settings.conf`.
