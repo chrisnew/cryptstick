@@ -9,10 +9,10 @@ You want to store sensitive data like your private keys more securely. Often you
 ## How to use?
 
 ```bash
-# Firstly, create a luks container using create.sh. You do this once.
+# First create a luks container using create.sh. You will have to do this once.
 ./create.sh my-container 1024M mkfs.ext4
 
-# Secondly, mount it using mount.sh
+# Second just mount it using mount.sh
 ./mount.sh my-container
 ```
 
