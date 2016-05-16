@@ -20,6 +20,9 @@ CRYPTSTICK_DEVICEMAPPER_PREFIX="cryptstick"
 CRYPTSTICK_MOUNT_OPTIONS="noatime"
 CRYPTSTICK_MOUNT_FILESYSTEM="ext4"
 
+# terminal emulator of choice
+CRYPTSTICK_TERM="xterm"
+
 if [ -f "$CRYPTSTICK_CONFFILE" ]; then
  . "$CRYPTSTICK_CONFFILE"
 fi
@@ -30,7 +33,19 @@ CRYPTSTICK_PRODUCT="cryptstick $CRYPTSTICK_VERSION"
 echo "$CRYPTSTICK_PRODUCT - welcome."
 
 if [ -z "$1" ]; then
-  exec xterm -title "$CRYPTSTICK_PRODUCT" -e "sudo $0 - || sleep 5s"
+  case $CRYPTSTICK_TERM in
+  	xterm)
+  	  exec xterm -title "$CRYPTSTICK_PRODUCT" -e "sudo $0 - || sleep 5s"
+  	  ;;
+  	  
+  	gnome-terminal|konsole)
+  	  exec $CRYPTSTICK_TERM -e "sudo $0 - || sleep 5s"
+  	  ;;
+  	  
+  	*)
+  	  exec $CRYPTSTICK_TERM "sudo $0 - || sleep 5s"
+  	  ;;
+  esac
 fi
 
 cd "$(dirname "$0")" || exit 1
