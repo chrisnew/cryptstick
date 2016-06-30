@@ -146,9 +146,6 @@ function shutdown {
  echo -n "...closing $mappedName: "
  cryptsetup --type luks luksClose "$mappedName" && echo "OK."
 
- echo -n "...removing mount point: "
- rmdir "$imageName" && echo "OK."
-
  echo -n "...syncing device: "
  sync && echo "OK."
 
